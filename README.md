@@ -14,8 +14,8 @@ This project implements a conversational AI chatbot using the Llama 3.1 language
 
 1. Clone this repository:
 ```bash
-git clone https://github.com/yourusername/llama-rag-chatbot.git
-cd llama-rag-chatbot
+git clone https://github.com/AnshChoudhary/Llama-3.1-RAG-Chatbot.git
+cd Llama-3.1-RAG-Chatbot
 ```
 2. Install the required dependencies:
 ```bash
