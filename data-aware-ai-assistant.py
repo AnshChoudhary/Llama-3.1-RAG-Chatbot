@@ -190,17 +190,56 @@ Please provide a helpful response, citing specific data where relevant."""}
 def create_demo():
     chatbot = ChatBot()
     
+    # Define available models
+    AVAILABLE_MODELS = [
+        "claude-3-5-haiku-latest",
+        "claude-3-5-sonnet-latest",
+        "cohere-embed-english-v3",
+        "cohere-embed-multilingual-v3",
+        "cohere-rerank-v3-5",
+        "deepseek-chat",
+        "deepseek-coder",
+        "deepseek-r1-distill-llama-70b",
+        "deepseek-reasoner",
+        "gemini-1.5-flash-002",
+        "gemini-1.5-pro-002",
+        "gemini-2.0-flash-exp",
+        "google-text-embedding-005",
+        "google-text-multilingual-embedding-002",
+        "google-textembedding-gecko",
+        "google-textembedding-gecko-multilingual-001",
+        "llama-3-2-90b-vision-instruct",
+        "o1",
+        "o1-mini",
+        "o3-mini"
+    ]
+    
     with gr.Blocks(theme=gr.themes.Soft(primary_hue="blue", neutral_hue="zinc")) as demo:
-        gr.Markdown(f"""
+        gr.Markdown("""
         # Data-Aware AI Assistant
-        Using model: {LITELLM_MODEL}
-        
         Upload your document (PDF, Excel, or CSV) and start chatting!
         """)
         
         with gr.Row():
             file_upload = gr.File(label="Upload Document", file_types=[".pdf", ".xlsx", ".xls", ".csv"])
+            model_dropdown = gr.Dropdown(
+                choices=AVAILABLE_MODELS,
+                value=LITELLM_MODEL,  # Set default to current model
+                label="Select Model",
+                interactive=True
+            )
             upload_status = gr.Textbox(label="Upload Status", interactive=False)
+        
+        def update_model(model_name):
+            global LITELLM_MODEL
+            LITELLM_MODEL = model_name
+            return f"Model updated to: {model_name}"
+        
+        model_dropdown.change(
+            fn=update_model,
+            inputs=[model_dropdown],
+            outputs=[upload_status]
+        )
         
         file_upload.upload(
             fn=chatbot.process_faq,
